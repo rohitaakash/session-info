@@ -1,12 +1,19 @@
 # session-info
 
 ## Design Approach:
-The code has been designed to take in a log file which contains ',' separated session id and the corresponding timestamp as an input through command line argument and finds the session id with the most number of visits in a time window of 1 hour. A HashMap is created to process the input with session id being the key and the timestamps belonging to the session id as an ArrayList. The HashMap is then iterated over each key to get the corresponding list of timestamps logged. Further, this list is iterated over to compute the number of visits in a 1 hour window with the each timestamp in the list. A count of maximum visits `maxCount` is maintained to store the most number of visits by any session id until the current computation. The corresponding user is store in `maxUser`. As the number of visits by a particular session id is computed for the timeframe, the same is eventually updated with the count and the last timestamp in the `sessionCount` HashMap if it's greater than the previous counts encountered.
+The code has been designed to take in a log file which contains ',' separated session id and the corresponding epoch timestamp as an input through command line argument and finds the session id with the most number of visits witch no consecutive visits having a timestamp difference of more that 1 hour. A HashMap is created to process the input with session id being the key and the timestamps belonging to the session id as an ArrayList. The HashMap is then iterated over each key to get the corresponding list of timestamps logged. The timestamps are then sorted in ascending order for a given session id. A global `maxCount` is maintained to store the most number of visits by any session id until the current computation. The corresponding session id is stored in `maxUser`. As the number of visits by a particular session id is computed for the timeframe, the same is eventually updated with the count and the last timestamp in the `sessionCount` HashMap if it's greater than the previous counts encountered.
 
 Once the loop terminates, the `sessionCount` has the count of the maximum visits and last timestamp by each session id. The session id with the largest visits overall is stored in `maxUser` and it's details are extracted and displayed to the standard output.
 
+Time Complexity: If number of unique session id in the log file = n and the maximum number of timestamps for a particular session id = m
+
+The outer loop takes O(n)
+Sorting takes (m log(m))
+Iterating over the sorted array in the inner loop takes O(m)
+Therefore, overall complexity of the code = O(n * (m log(m) + m)) = O(n.m*log(m))
+
 ## Assumptions Made:
-None
+The log file has genuine values.
 
 ## Test Cases Considered:
 Corner cases include a scenario when two session id have the same visit count but one has greater timestamp value. Also, the innermost loop runs one more than the size of the timestamp list to ensure the values computed for the last index are successfully processed.
