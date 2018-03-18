@@ -34,7 +34,7 @@ public class SessionInfo {
 
             Map<Integer, List<Long>> sessionCount = new HashMap<Integer, List<Long>>();     // hashmap to store the session counts for each id and the last timestamp seen
             int maxCount = 0;                                                               // the maximum number of visiting sessions till present
-            int maxUser = 0;                                                                // the session id with maximum visits
+            int maxId = 0;                                                                // the session id with maximum visits
             for (int id : sessions.keySet()) {
                 List<Long> timestamps = sessions.get(id);                                   // extract the list of timestamps for a given session id
                 Collections.sort(timestamps);                                               // sort the timestamps in ascending order
@@ -44,8 +44,8 @@ public class SessionInfo {
                         count++;
                     } else {
                         if (maxCount <= count) {
-                            if (maxCount < count || (maxCount == count && sessionCount.get(maxUser).get(1) < timestamps.get(i - 1)))
-                                maxUser = id;                                               // update the session id with maximum visits when current count is higher than the max count
+                            if (maxCount < count || (maxCount == count && sessionCount.get(maxId).get(1) < timestamps.get(i - 1)))
+                                maxId = id;                                               // update the session id with maximum visits when current count is higher than the max count
                                                                                             // or when the current session id has greater timestamp value when the counts are equal
 
                             maxCount = count;                                               // update the max count
@@ -63,7 +63,7 @@ public class SessionInfo {
 
             }
 
-            System.out.println(maxUser + "," + sessionCount.get(maxUser).get(0) + "," + sessionCount.get(maxUser).get(1));
+            System.out.println(maxId + "," + sessionCount.get(maxId).get(0) + "," + sessionCount.get(maxId).get(1));
         } catch (FileNotFoundException ex) {
             System.out.println("Unable to open file '" + logFile + "'");
         } catch (IOException ex) {
